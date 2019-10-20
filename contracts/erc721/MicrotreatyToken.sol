@@ -1,14 +1,23 @@
 pragma solidity ^0.5.0;
 
+import "./ERC721.sol";
+import "./ERC721Enumerable.sol";
 import "./ERC721Metadata.sol";
 import "../auth/roles/MinterRole.sol";
 
-
 /**
- * @title ERC721MetadataMintable
- * @dev ERC721 minting logic with metadata.
+ * @title MicrotreatyToken
+ * @notice Full ERC721 Token
+ * @dev This implementation includes all the required and some optional functionality of the ERC721 standard
+ * Moreover, it includes approve all functionality using operator terminology.
+ *
+ * See https://eips.ethereum.org/EIPS/eip-721
  */
-contract ERC721MetadataMintable is ERC721, ERC721Metadata, MinterRole {
+contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, MinterRole {
+    constructor (string memory name, string memory symbol) public ERC721Metadata(name, symbol) {
+        // solhint-disable-previous-line no-empty-blocks
+    }
+
     /**
      * @dev Function to mint tokens.
      * @param to The address that will receive the minted tokens.
