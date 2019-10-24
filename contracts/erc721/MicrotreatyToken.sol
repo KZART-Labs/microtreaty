@@ -26,7 +26,7 @@ contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, MinterRol
      * @return A boolean that indicates if the operation was successful.
      */
     function mintWithTokenURI(address to, uint256 tokenId, string memory tokenURI) public onlyMinter returns (bool) {
-        _mint(to, tokenId);
+        _safeMint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);
         return true;
     }
