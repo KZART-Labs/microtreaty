@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./ERC721.sol";
 import "./ERC721Enumerable.sol";
 import "./ERC721Metadata.sol";
-import "../auth/roles/MinterRole.sol";
+import "../auth/roles/WhitelistAdminRole.sol";
 
 /**
  * @title MicrotreatyToken
@@ -13,7 +13,7 @@ import "../auth/roles/MinterRole.sol";
  *
  * See https://eips.ethereum.org/EIPS/eip-721
  */
-contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, MinterRole {
+contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, WhitelistAdminRole {
     constructor (string memory name, string memory symbol) public ERC721Metadata(name, symbol) {
         // solhint-disable-previous-line no-empty-blocks
     }
@@ -25,7 +25,7 @@ contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, MinterRol
      * @param tokenURI The token URI of the minted token.
      * @return A boolean that indicates if the operation was successful.
      */
-    function mintWithTokenURI(address to, uint256 tokenId, string memory tokenURI) public onlyMinter returns (bool) {
+    function mintWithTokenURI(address to, uint256 tokenId, string memory tokenURI) public onlyWhitelistAdmin returns (bool) {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);
         return true;

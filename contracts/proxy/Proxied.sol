@@ -1,22 +1,22 @@
 pragma solidity ^0.5.8;
 
-import "../auth/Ownable.sol";
 import "./BaseProxy.sol";
 import "./ContractNames.sol";
+import "../auth/roles/WhitelistAdminRole.sol";
 
 /**
     @title Proxied
     @dev Wraps the contracts and functions from unauthorized access outside the system
     @author karlptrck
  */
-contract Proxied is Ownable, ContractNames {
+contract Proxied is WhitelistAdminRole, ContractNames {
     BaseProxy public proxy;
 
-    function setContainerEntry(BaseProxy _proxy) public onlyOwner {
+    function setProxy(BaseProxy _proxy) public onlyWhitelistAdmin {
         proxy = _proxy;
     }
 
-    modifier onlyContained(){
+    modifier onlyProxied(){
         require(address(proxy) != address(0), "No Container");
         require(msg.sender == address(proxy), "Only through Container");
         _;

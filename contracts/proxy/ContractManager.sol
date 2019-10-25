@@ -1,16 +1,16 @@
 pragma solidity ^0.5.8;
 
-import "../auth/Ownable.sol";
+import "../auth/roles/WhitelistAdminRole.sol";
 
 /**
     @title ContractManager
     @dev Manages all the contract in the system
     @author karlptrck
  */
-contract ContractManager is Ownable {
+contract ContractManager is WhitelistAdminRole {
     mapping(string => address) private contracts;
 
-    function addContract(string memory name, address contractAddress) public onlyOwner {
+    function addContract(string memory name, address contractAddress) public onlyWhitelistAdmin {
         require(contracts[name] == address(0));
         contracts[name] = contractAddress;
     }
@@ -20,12 +20,12 @@ contract ContractManager is Ownable {
         return contracts[name];
     }
 
-    function removeContract(string memory name) public onlyOwner {
+    function removeContract(string memory name) public onlyWhitelistAdmin {
         require(contracts[name] != address(0));
         contracts[name] = address(0);
     }
 
-    function updateContract(string memory name, address contractAddress) public onlyOwner {
+    function updateContract(string memory name, address contractAddress) public onlyWhitelistAdmin {
         require(contracts[name] != address(0));
         contracts[name] = contractAddress;
     }
