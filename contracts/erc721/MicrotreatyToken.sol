@@ -22,12 +22,18 @@ contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, Whitelist
      * @dev Function to mint tokens.
      * @param to The address that will receive the minted tokens.
      * @param tokenId The token id to mint.
-     * @param tokenURI The token URI of the minted token.
+     * @param tokenDetails The token details of the minted token.
      * @return A boolean that indicates if the operation was successful.
      */
-    function mintWithTokenURI(address to, uint256 tokenId, string memory tokenURI) public onlyWhitelistAdmin returns (bool) {
+    function mintWithTokenDetails
+    (
+        address to,
+        uint256 tokenId,
+        string memory tokenDetails
+    )
+    public onlyWhitelistAdmin returns (bool) {
         _safeMint(to, tokenId);
-        _setTokenURI(tokenId, tokenURI);
+        _setTokenDetails(tokenId, tokenDetails);
         return true;
     }
 }

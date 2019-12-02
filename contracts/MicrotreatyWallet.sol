@@ -12,10 +12,10 @@ contract MicrotreatyWallet is Proxied, IERC721Receiver {
         token = MicrotreatyToken(_token);
     }
 
-    function mintWithTokenURI(uint256 tokenId, string calldata tokenURI) external
+    function mintWithTokenDetails(uint256 tokenId, string calldata tokenDetails) external
     onlyContract(CONTRACT_MICROTREATY)
     {
-        token.mintWithTokenURI(address(this), tokenId, tokenURI);
+        token.mintWithTokenDetails(address(this), tokenId, tokenDetails);
     }
 
     function transfer(address to, uint256 tokenId) external

@@ -17,8 +17,8 @@ contract Microtreaty is Proxied {
         walletDB = WalletDB(proxy.getContract(CONTRACT_WALLET_DB));
     }
 
-    function create(address owner, uint256 tokenId, string calldata tokenURI) external onlyProxied {
-        wallet.mintWithTokenURI(tokenId, tokenURI);
+    function create(address owner, uint256 tokenId, string calldata tokenDetails) external onlyProxied {
+        wallet.mintWithTokenDetails(tokenId, tokenDetails);
 
         walletDB.addTreaty(tokenId, owner);
 

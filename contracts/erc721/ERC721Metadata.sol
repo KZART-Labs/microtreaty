@@ -14,6 +14,8 @@ contract ERC721Metadata is ERC165, ERC721, IERC721Metadata {
     // Optional mapping for token URIs
     mapping(uint256 => string) private _tokenURIs;
 
+    mapping(uint256 => string) private _tokenDetails;
+
     /*
      *     bytes4(keccak256('name()')) == 0x06fdde03
      *     bytes4(keccak256('symbol()')) == 0x95d89b41
@@ -69,6 +71,27 @@ contract ERC721Metadata is ERC165, ERC721, IERC721Metadata {
     function _setTokenURI(uint256 tokenId, string memory uri) internal {
         require(_exists(tokenId), "ERC721Metadata: URI set of nonexistent token");
         _tokenURIs[tokenId] = uri;
+    }
+
+    /**
+     * @dev Internal function to set the token details for a given token.
+     * Reverts if the token ID does not exist.
+     * @param tokenId uint256 ID of the token to set its details
+     * @param details string details to assign
+     */
+    function _setTokenDetails(uint256 tokenId, string memory details) internal {
+        require(_exists(tokenId), "ERC721Metadata: Details set of nonexistent token");
+        _tokenDetails[tokenId] = details;
+    }
+
+    /**
+     * @dev Returns an URI for a given token ID.
+     * Throws if the token ID does not exist. May return an empty string.
+     * @param tokenId uint256 ID of the token to query
+     */
+    function tokenDetails(uint256 tokenId) external view returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: Details query for nonexistent token");
+        return _tokenDetails[tokenId];
     }
 
     /**
