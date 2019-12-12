@@ -139,4 +139,24 @@ contract CommonDB is EternalStorage, Proxied {
     {
         return _bytes[keccak256(abi.encodePacked(contractName, key))];
     }
+
+    function addUintToArray(
+        string calldata contractName,
+        bytes32 key,
+        uint256 value
+    )
+    external
+    onlyContract(contractName)
+    {
+        _uintArray[keccak256(abi.encodePacked(contractName, key))].push(value);
+    }
+
+    function getUintArray(
+        string memory contractName,
+        bytes32 key
+    )
+    public view returns(uint256[] memory)
+    {
+        return _uintArray[keccak256(abi.encodePacked(contractName, key))];
+    }
 }

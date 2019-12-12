@@ -10,11 +10,11 @@ import "./Microtreaty.sol";
  */
 contract MTProxy is BaseProxy {
 
-    function create(address owner, uint256 tokenId, string calldata tokenDetails) external {
-        Microtreaty(getAddressOfMicrotreaty()).create(owner, tokenId, tokenDetails);
+    function create(address owner, string calldata tokenDetails) external onlyWhitelistAdmin {
+        Microtreaty(getAddressOfMicrotreaty()).create(owner, tokenDetails);
     }
 
-    function transfer(address owner, address to, uint256 tokenId) external {
+    function transfer(address owner, address to, uint256 tokenId) external onlyWhitelistAdmin {
         Microtreaty(getAddressOfMicrotreaty()).transfer(owner, to, tokenId);
     }
 

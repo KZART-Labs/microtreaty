@@ -12,12 +12,16 @@ contract Microtreaty is Proxied {
     MicrotreatyWallet wallet;
     WalletDB walletDB;
 
+    uint tokenIdCounter = 1000;
+
     function init() external onlyWhitelistAdmin {
         wallet = MicrotreatyWallet(proxy.getContract(CONTRACT_MICROTREATY_WALLET));
         walletDB = WalletDB(proxy.getContract(CONTRACT_WALLET_DB));
     }
 
-    function create(address owner, uint256 tokenId, string calldata tokenDetails) external onlyProxied {
+    function create(address owner, string calldata tokenDetails) external onlyProxied {
+        uint256 tokenId = generateUID();
+
         wallet.mintWithTokenDetails(tokenId, tokenDetails);
 
         walletDB.addTreaty(tokenId, owner);
@@ -33,5 +37,10 @@ contract Microtreaty is Proxied {
         walletDB.updateTreaty(tokenId, owner, to);
 
         emit TreatyTransferred(owner, to, tokenId);
+    }
+
+    function generateUID() internal returns (uint) {
+        tokenIdCounter = tokenIdCounter + 1;
+        return tokenIdCounter;
     }
 }
