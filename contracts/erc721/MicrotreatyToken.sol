@@ -36,4 +36,8 @@ contract MicrotreatyToken is ERC721, ERC721Enumerable, ERC721Metadata, Whitelist
         _setTokenDetails(tokenId, tokenDetails);
         return true;
     }
+
+    function burn(address owner, uint256 tokenId) external {
+        _burn(owner, tokenId);
+    }
 }

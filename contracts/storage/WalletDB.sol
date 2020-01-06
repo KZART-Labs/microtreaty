@@ -34,19 +34,18 @@ contract WalletDB is Proxied {
     }
 
     // TODO add token expiry
-    function addTreaty(uint256 tokenId, address owner) external
+    function addTreaty(uint256 tokenId, address owner, uint256 expiryDate) external
     onlyContract(CONTRACT_MICROTREATY) {
         commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId)), tokenId);
         commonDB.setAddress(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'owner')), owner);
         commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status')), uint(TreatyStatus.IN));
+        commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'expiry')), expiryDate);
 
         ( uint created, uint distributed ) = getObligationDetails(owner);
 
         _addTokenToOwnerEnumeration(owner, tokenId);
 
         _addTokenToAllTokensEnumeration(tokenId);
-
-        // commonDB.addUintToArray(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner)), tokenId);
 
         // udpates count
         commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner, 'created')), created + 1);
@@ -74,12 +73,15 @@ contract WalletDB is Proxied {
 
     }
 
-    function burn() external {
+    function burn(uint256 tokenId, address owner) external
+    onlyContract(CONTRACT_MICROTREATY) {
         // _removeTokenFromOwnerEnumeration(owner, tokenId);
         // // Since tokenId will be deleted, we can clear its slot in _ownedTokensIndex to trigger a gas refund
         // _ownedTokensIndex[tokenId] = 0;
 
         // _removeTokenFromAllTokensEnumeration(tokenId);
+
+        commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status')), uint(TreatyStatus.INVALID));
     }
 
 
@@ -88,11 +90,12 @@ contract WalletDB is Proxied {
         return commonDB.getAddress(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'owner')));
     }
 
-    function getTreatyStatus(uint256 tokenId, address owner) external returns (uint) {
-        return commonDB.getUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status')));
+    function getTreatyDetails(uint256 tokenId, address owner) external view returns (uint, uint) {
+        return (commonDB.getUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status'))),
+                commonDB.getUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'expiry'))));
     }
 
-    function getObligationDetails(address owner) public returns (uint, uint) {
+    function getObligationDetails(address owner) public view returns (uint, uint) {
         return (commonDB.getUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner, 'created'))),
                 commonDB.getUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner, 'distributed'))));
     }

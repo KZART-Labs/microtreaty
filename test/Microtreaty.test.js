@@ -35,9 +35,9 @@ contract('Microtreaty', ([ owner, user1, user2, user3 ]) => {
 
     describe('Features', () => {
         it('should mint token', async () => {
-            await this.proxy.create(user1, "title:Karl Token~Description:desc here")
-            await this.proxy.create(user1, "title:Karl Token~Description:desc here")
-            await this.proxy.create(user1, "title:Karl Token~Description:desc here")
+            await this.proxy.create(user1, "title:Karl Token~Description:desc here", 123)
+            await this.proxy.create(user1, "title:Karl Token~Description:desc here", 123)
+            await this.proxy.create(user1, "title:Karl Token~Description:desc here", 123)
             // await this.proxy.create(user1, "title:Karl Token~Description:desc here")
             // let ownerOf = await this.token.ownerOf(1)
             // console.log(ownerOf)
@@ -55,6 +55,9 @@ contract('Microtreaty', ([ owner, user1, user2, user3 ]) => {
 
             let x = Number(list[2])
             console.log(x)
+
+            let details = await this.walletDB.getTreatyDetails(x, user1)
+            console.log(Number(details[1]))
         })
      
     })
