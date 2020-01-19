@@ -29,10 +29,12 @@ contract Microtreaty is Proxied {
         emit TreatyCreated(owner, tokenId);
     }
 
-    function transfer(address owner, address to, uint256 tokenId) external onlyProxied {
+    function transfer(address owner, address to, uint256 tokenId, bool isExternal) external onlyProxied {
         require(walletDB.getTreatyOwner(tokenId) == owner, "Not authorized");
 
-        wallet.transfer(to, tokenId);
+        if(isExternal){
+            wallet.transfer(to, tokenId);
+        }
 
         walletDB.updateTreaty(tokenId, owner, to);
 

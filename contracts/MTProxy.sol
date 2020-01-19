@@ -14,8 +14,8 @@ contract MTProxy is BaseProxy {
         Microtreaty(getAddressOfMicrotreaty()).create(owner, tokenDetails, expiryDate);
     }
 
-    function transfer(address owner, address to, uint256 tokenId) external onlyWhitelistAdmin {
-        Microtreaty(getAddressOfMicrotreaty()).transfer(owner, to, tokenId);
+    function transfer(address owner, address to, uint256 tokenId, bool isExternal) external onlyWhitelistAdmin {
+        Microtreaty(getAddressOfMicrotreaty()).transfer(owner, to, tokenId, isExternal);
     }
 
     function burn(address owner, uint256 tokenId) external onlyWhitelistAdmin {
