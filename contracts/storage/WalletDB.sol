@@ -75,11 +75,11 @@ contract WalletDB is Proxied {
 
     function burn(uint256 tokenId, address owner) external
     onlyContract(CONTRACT_MICROTREATY) {
-        // _removeTokenFromOwnerEnumeration(owner, tokenId);
-        // // Since tokenId will be deleted, we can clear its slot in _ownedTokensIndex to trigger a gas refund
-        // _ownedTokensIndex[tokenId] = 0;
+        _removeTokenFromOwnerEnumeration(owner, tokenId);
+        // Since tokenId will be deleted, we can clear its slot in _ownedTokensIndex to trigger a gas refund
+        _ownedTokensIndex[tokenId] = 0;
 
-        // _removeTokenFromAllTokensEnumeration(tokenId);
+        _removeTokenFromAllTokensEnumeration(tokenId);
 
         commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status')), uint(TreatyStatus.INVALID));
     }
