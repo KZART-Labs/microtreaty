@@ -49,7 +49,7 @@ contract WalletDB is Proxied {
 
         // udpates count
         commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner, 'created')), created + 1);
-        commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner, 'distributed')), distributed + 1);
+       
     }
 
     function updateTreaty(uint256 tokenId, address currentOwner, address newOwner) external
@@ -63,7 +63,11 @@ contract WalletDB is Proxied {
         // updates the ownership
         commonDB.setAddress(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'owner')), newOwner);
 
-        _removeTokenFromOwnerEnumeration(currentOwner, tokenId);
+        ( uint created, uint distributed ) = getObligationDetails(currentOwner);
+
+        commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(currentOwner, 'distributed')), distributed + 1);
+
+        // _removeTokenFromOwnerEnumeration(currentOwner, tokenId);
 
         _addTokenToOwnerEnumeration(newOwner, tokenId);
     }
