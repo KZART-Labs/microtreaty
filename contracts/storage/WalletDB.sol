@@ -72,6 +72,20 @@ contract WalletDB is Proxied {
         _addTokenToOwnerEnumeration(newOwner, tokenId);
     }
 
+    function transferIn(uint256 tokenId, address owner) external
+    onlyContract(CONTRACT_MICROTREATY) {
+        commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status')), uint(TreatyStatus.IN));
+        commonDB.setAddress(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'owner')), owner);
+
+        if(!doesTokenExistOnUser(owner, tokenId)){
+            _addTokenToOwnerEnumeration(owner, tokenId);
+        }
+        // _addTokenToOwnerEnumeration(owner, tokenId);
+
+        // _addTokenToAllTokensEnumeration(tokenId);
+    }
+
+
     function invalidateTreaty(uint256 tokenId) external 
     onlyContract(CONTRACT_MICROTREATY) {
 
@@ -115,6 +129,19 @@ contract WalletDB is Proxied {
      */
     function tokensOfOwner(address owner) public view returns (uint256[] memory) {
         return _ownedTokens[owner];
+    }
+
+    function doesTokenExistOnUser(address owner, uint256 tokenId) public returns(bool) {
+        // TODO optimize by removing loop
+        uint256[] memory currentTokens = tokensOfOwner(owner);
+
+        for(uint i = 0; i < currentTokens.length; i++) {
+            if(currentTokens[i] == tokenId){
+                return true;
+            }
+        }
+
+        return false;
     }
 
         /**

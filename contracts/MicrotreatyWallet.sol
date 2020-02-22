@@ -21,7 +21,13 @@ contract MicrotreatyWallet is Proxied, IERC721Receiver {
     function transfer(address to, uint256 tokenId) external
     onlyContract(CONTRACT_MICROTREATY)
     {
-        token.transferFrom(address(this), to, tokenId);
+        token.safeTransferFrom(address(this), to, tokenId, "");
+    }
+
+    function transferIn(address from, uint256 tokenId) external
+    onlyContract(CONTRACT_MICROTREATY)
+    {
+        token.safeTransferFrom(from, address(this), tokenId, "");
     }
 
     function burn(uint256 tokenId) external

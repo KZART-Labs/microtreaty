@@ -41,6 +41,12 @@ contract Microtreaty is Proxied {
         emit TreatyTransferred(owner, to, tokenId);
     }
 
+    function transferIn(address owner, uint256 tokenId) external onlyProxied {
+        wallet.transferIn(owner, tokenId);
+
+        walletDB.transferIn(tokenId, owner);
+    }
+
     function burn(address owner, uint256 tokenId) external onlyProxied {
         wallet.burn(tokenId);
 
