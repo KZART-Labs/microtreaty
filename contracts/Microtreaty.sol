@@ -32,6 +32,11 @@ contract Microtreaty is Proxied {
     function transfer(address owner, address to, uint256 tokenId, bool isExternal) external onlyProxied {
         require(walletDB.getTreatyOwner(tokenId) == owner, "Not authorized");
 
+        ( uint status, uint expiryDate ) = walletDB.getTreatyDetails(tokenId, owner);
+
+        require(status == 0, "Invalid Token");
+        require(now > expiryDate, "Token Expired");
+
         if(isExternal){
             wallet.transfer(to, tokenId);
         }
@@ -51,6 +56,11 @@ contract Microtreaty is Proxied {
         wallet.burn(tokenId);
 
         walletDB.burn(tokenId, owner);
+    }
+
+    function invalidateTreaty(uint tokenId, address owner) external onlyProxied {
+
+        walletDB.invalidateTreaty(tokenId, owner);
     }
 
     function generateUID() internal returns (uint) {

@@ -26,4 +26,8 @@ contract MTProxy is BaseProxy {
          Microtreaty(getAddressOfMicrotreaty()).burn(owner, tokenId);
     }
 
+    function invalidateTreaty(uint tokenId, address owner) external {
+        Microtreaty(getAddressOfMicrotreaty()).invalidateTreaty(tokenId, owner);
+    }
+
 }

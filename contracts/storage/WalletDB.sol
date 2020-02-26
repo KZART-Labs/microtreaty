@@ -86,9 +86,9 @@ contract WalletDB is Proxied {
     }
 
 
-    function invalidateTreaty(uint256 tokenId) external 
+    function invalidateTreaty(uint256 tokenId, address owner) external
     onlyContract(CONTRACT_MICROTREATY) {
-
+        commonDB.setUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, owner, 'status')), uint(TreatyStatus.INVALID));
     }
 
     function burn(uint256 tokenId, address owner) external
@@ -120,6 +120,11 @@ contract WalletDB is Proxied {
 
     function getTokens(address owner) public view returns (uint[] memory) {
         return commonDB.getUintArray(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(owner)));
+    }
+
+    function isTokenExpired(uint256 tokenId) external view returns (bool) {
+        return (commonDB.getUint(CONTRACT_WALLET_DB, keccak256(abi.encodePacked(tokenId, 'expiry'))) < now)
+                ? true : false;
     }
 
     /**
