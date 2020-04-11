@@ -69,7 +69,11 @@ contract WalletDB is Proxied {
 
         // _removeTokenFromOwnerEnumeration(currentOwner, tokenId);
 
-        _addTokenToOwnerEnumeration(newOwner, tokenId);
+        // _addTokenToOwnerEnumeration(newOwner, tokenId);
+
+        if(!doesTokenExistOnUser(newOwner, tokenId)){
+            _addTokenToOwnerEnumeration(newOwner, tokenId);
+        }
     }
 
     function transferIn(uint256 tokenId, address owner) external

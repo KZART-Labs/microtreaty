@@ -35,7 +35,7 @@ contract Microtreaty is Proxied {
         ( uint status, uint expiryDate ) = walletDB.getTreatyDetails(tokenId, owner);
 
         require(status == 0, "Invalid Token");
-        require(now > expiryDate, "Token Expired");
+        // require(now > expiryDate, "Token Expired");
 
         if(isExternal){
             wallet.transfer(to, tokenId);
